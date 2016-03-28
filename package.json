@@ -1,0 +1,61 @@
+{
+  "name": "scene-tree",
+  "version": "1.0.0",
+  "description": "Modular scene graph for composing and manipulating objects in a 3D scene",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "https://github.com/hughsk"
+  },
+  "dependencies": {
+    "display-tree": "^1.0.0",
+    "gl-mat3": "^1.0.0",
+    "gl-mat4": "^1.1.4",
+    "inherits": "^2.0.1"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "budo": "^8.0.4",
+    "camera-spin": "^3.0.1",
+    "canvas-fit": "^1.5.0",
+    "eye-vector": "0.0.0",
+    "face-normals": "0.0.0",
+    "gl-geometry": "^3.1.0",
+    "gl-mat4": "^1.1.4",
+    "gl-shader": "^4.2.0",
+    "glsl-hsl2rgb": "^1.1.0",
+    "glsl-specular-gaussian": "^1.0.0",
+    "glslify": "^5.0.2",
+    "icosphere": "^1.0.0",
+    "raf": "^3.1.0",
+    "unindex-mesh": "^2.0.0"
+  },
+  "scripts": {
+    "start": "budo demo.js:bundle.js -t glslify",
+    "bundle": "browserify demo.js -o bundle.js -t glslify"
+  },
+  "keywords": [
+    "scene,",
+    "tree,",
+    "graph,",
+    "display,",
+    "render,",
+    "webgl,",
+    "javascript,",
+    "matrix,",
+    "model,",
+    "normal,",
+    "realtime,",
+    "3d"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hughsk/scene-tree.git"
+  },
+  "homepage": "https://github.com/hughsk/scene-tree",
+  "bugs": {
+    "url": "https://github.com/hughsk/scene-tree/issues"
+  }
+}

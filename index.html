@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>scene-tree</title>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300|Ubuntu+Mono' rel='stylesheet' type='text/css'>
+    <style media="screen">
+      article {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        max-width: 400px;
+        z-index: 3;
+        padding: 1.5rem;
+        background: rgba(0,0,0,0.75);
+        color: #fff;
+        border-radius: 0.25rem;
+        font-family: 'Ubuntu Mono', monospace;
+        font-weight: 100;
+        font-size: 0.9rem;
+      }
+      h1 {
+        font-family: Roboto, Helvetica, sans-serif;
+        font-weight: 300;
+        margin: 0; padding: 0;
+        margin-bottom: 1rem;
+        line-height: 1em;
+      }
+      a {
+        text-decoration: none;
+        color: #66c4ff;
+      }
+      p {
+        color: rgba(255,255,255,0.8);
+        line-height: 1.5em;
+      }
+      p:last-of-type {
+        margin-bottom: 0;
+      }
+      @media screen and (max-width: 600px) {
+        article {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <article>
+      <h1>scene-tree</h1>
+      <p>A modular scene graph for manipulating objects in a 3D scene in a more convenient and familiar fashion.</p>
+      <p>
+        <strong>
+          <a href="http://github.com/hughsk/scene-tree">Check it out on GitHub</a>
+        </strong>
+      </p>
+    </article>
+    <script charset="utf-8" src="bundle.js"></script>
+  </body>
+</html>
