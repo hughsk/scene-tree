@@ -76,6 +76,11 @@ Traverses through the node and its descendants, updating their normal and model 
 
 3x3 `Float32Array` matrix that contains the transformation required for the node's normals to correctly light the object given its new position in the scene.
 
+## See also
+
+* [regl](https://github.com/mikolalysenko/regl)
+* [display-tree](https://github.com/hughsk/display-tree)
+
 ## License
 
 MIT, see [LICENSE.md](http://github.com/hughsk/scene-tree/blob/master/LICENSE.md) for details.
