@@ -21,10 +21,14 @@ function SceneTreeNode (data) {
   DisplayTreeNode.call(this, data)
 
   data.position = data.position || new Float32Array(3)
-  data.rotation = data.rotation || new Float32Array(4)
   data.scale = typeof data.scale === 'number'
     ? defaultScale(data.scale)
     : data.scale || defaultScale(1)
+
+  if (!data.rotation) {
+    data.rotation = new Float32Array(4)
+    data.rotation[3] = 1
+  }
 
   this.normalMatrix = identity(new Float32Array(9))
   this.modelMatrix = identity(new Float32Array(16))
