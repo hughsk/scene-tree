@@ -18,7 +18,7 @@ Creates a new node. data is an optional object that may be supplied for assignin
 
 * `position`: an `[x, y, z]` array specifying the node's position relative to its parent.
 * `scale`: an `[x, y, z]` array specifying the node's scale. You can also pass in a single number.
-* `rotation`: an `[x, y, z]` array specifying the node's rotation. This'll hopefully be tweaked over the next couple of days to become a quaternion value instead of an Euler rotation.
+* `rotation`: an `[x, y, z, w]` array specifying the node's rotation as a quaternion.
 
 ``` javascript
 var Node = require('scene-tree')
@@ -43,13 +43,26 @@ node.setPosition([1, 1, 1])
 
 ### `node.setRotation(x, y, z)`
 
-Updates the node's rotation. Again, this should be called instead of modifying `node.data.rotation` directly.
+Updates the node's rotation quaternion. Again, this should be called instead of modifying `node.data.rotation` directly.
 
 ``` javascript
 var node = Node()
 
-node.setRotation(0, 1, 0)
+node.setRotation(0, 0, 0, 1)
+node.setRotation([0, 0, 0, 1])
+```
+
+### `node.setEuler(x, y, z, order)`
+
+Update the node's rotation quaternion using euler (XYZ) angles. Optionally you can pass in an `order` string to specify the order in which to apply the rotations. This method is included for convenience, but is generally slower than using `node.setRotation` directly.
+
+``` javascript
+var node = Node()
+
+node.setRotation(Math.PI, 1, Math.PI * 2)
+node.setRotation(Math.PI, 1, Math.PI * 2, 'xyz')
 node.setRotation([Math.PI, Math.PI, 1])
+node.setRotation([Math.PI, Math.PI, 1], 'zxy')
 ```
 
 ### `node.setScale(x, y, z)`

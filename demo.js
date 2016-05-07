@@ -64,7 +64,7 @@ function render () {
   shader.uniforms.eye = eye(camera.view(), eyeVector)
   shader.uniforms.time = (Date.now() - start) / 1000
   scene.each(function (node) {
-    node.setRotation(
+    node.setEuler(
       1.20 * Math.sin(Date.now() / 10000 * 1.5),
       0.80 * Math.sin(Date.now() / 2339 * 1.5),
       0.45 * Math.sin(Date.now() / 9000)
