@@ -1,9 +1,11 @@
 var getNormal = require('gl-mat3/normal-from-mat4')
 var DisplayTreeNode = require('display-tree')
 var quatIdentity = require('gl-quat/identity')
-var identity = require('gl-mat4/identity')
+var identity4 = require('gl-mat4/identity')
+var identity3 = require('gl-mat3/identity')
 var multiply = require('gl-mat4/multiply')
-var copy = require('gl-mat4/copy')
+var copy4 = require('gl-mat4/copy')
+var copy3 = require('gl-mat3/copy')
 var inherits = require('inherits')
 var rotateX = require('gl-quat/rotateX')
 var rotateY = require('gl-quat/rotateY')
@@ -20,6 +22,16 @@ function SceneTreeNode (data) {
   data = data || {}
   DisplayTreeNode.call(this, data)
 
+  this.normalMatrix = identity4(new Float32Array(9))
+  this.modelMatrix = identity4(new Float32Array(16))
+  this.baseModelMatrix = identity4(new Float32Array(16))
+  this.matrixDirty = true
+  this.matrixIdentity = !(
+    data.rotation ||
+    data.position ||
+    data.scale || typeof data.scale === 'number'
+  )
+
   data.position = data.position || new Float32Array(3)
   data.scale = typeof data.scale === 'number'
     ? defaultScale(data.scale)
@@ -29,11 +41,6 @@ function SceneTreeNode (data) {
     data.rotation = new Float32Array(4)
     data.rotation[3] = 1
   }
-
-  this.normalMatrix = identity(new Float32Array(9))
-  this.modelMatrix = identity(new Float32Array(16))
-  this.baseModelMatrix = identity(new Float32Array(16))
-  this.matrixDirty = true
 }
 
 SceneTreeNode.prototype.tick = function () {
@@ -45,30 +52,44 @@ function tickNode (node) {
   var data = node.data
   var model = node.modelMatrix
   var baseModel = node.baseModelMatrix
+  var normalMatrix = node.normalMatrix
 
-  if (node.matrixDirty) {
-    identity(baseModel)
-
-    var rotation = data.rotation
-    var position = data.position
-    var scaleDat = data.scale
-
-    fromRotationTranslationScale(baseModel, rotation, position, scaleDat)
-  }
-
-  if (node.parent && node.parent.modelMatrix) {
-    multiply(model, node.parent.modelMatrix, baseModel)
+  if (node.matrixIdentity) {
+    // baseModel/model default to an identity matrix, so we can safely ignore
+    // them here as matrixIdentity is only true if the position/rotation/scale
+    // has never been manipulated.
+    if (node.parent && node.parent.modelMatrix) {
+      copy3(normalMatrix, node.parent.normalMatrix)
+    } else {
+      identity3(normalMatrix)
+    }
   } else {
-    copy(model, baseModel)
+    if (node.matrixDirty) {
+      identity4(baseModel)
+
+      var rotation = data.rotation
+      var position = data.position
+      var scaleDat = data.scale
+
+      fromRotationTranslationScale(baseModel, rotation, position, scaleDat)
+    }
+
+    if (node.parent && node.parent.modelMatrix) {
+      multiply(model, node.parent.modelMatrix, baseModel)
+    } else {
+      copy4(model, baseModel)
+    }
+
+    getNormal(normalMatrix, model)
   }
 
-  getNormal(node.normalMatrix, model)
   node.matrixDirty = false
 }
 
 SceneTreeNode.prototype.setPosition = function (x, y, z) {
   var pos = this.data.position
   this.matrixDirty = true
+  this.matrixIdentity = false
   if (Array.isArray(x)) {
     pos[0] = x[0]
     pos[1] = x[1]
@@ -84,6 +105,7 @@ SceneTreeNode.prototype.setPosition = function (x, y, z) {
 SceneTreeNode.prototype.setRotation = function (x, y, z, w) {
   var rot = this.data.rotation
   this.matrixDirty = true
+  this.matrixIdentity = false
   if (Array.isArray(x)) {
     rot[0] = x[0]
     rot[1] = x[1]
@@ -101,6 +123,7 @@ SceneTreeNode.prototype.setRotation = function (x, y, z, w) {
 SceneTreeNode.prototype.setEuler = function (x, y, z, order) {
   var rot = this.data.rotation
   this.matrixDirty = true
+  this.matrixIdentity = false
   quatIdentity(rot)
 
   var X, Y, Z, O
