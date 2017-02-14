@@ -22,6 +22,7 @@ function SceneTreeNode (data) {
   data = data || {}
   DisplayTreeNode.call(this, data)
 
+  this._eachSorter = null
   this.normalMatrix = identity4(new Float32Array(9))
   this.modelMatrix = identity4(new Float32Array(16))
   this.baseModelMatrix = identity4(new Float32Array(16))
@@ -44,8 +45,13 @@ function SceneTreeNode (data) {
 }
 
 SceneTreeNode.prototype.tick = function () {
+  if (!this._eachSorter) this._eachSorter = this.list()
+
+  var nodes = this._eachSorter()
   tickNode(this)
-  this.each(tickNode)
+  for (var i = 0; i < nodes.length; i++) {
+    tickNode(nodes[i])
+  }
 }
 
 function tickNode (node) {
